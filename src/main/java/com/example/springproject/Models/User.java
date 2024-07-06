@@ -1,12 +1,47 @@
 package com.example.springproject.Models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "app_user")
 public class User {
-  private String firstName;
-  private String lastName;
-  private String username;
-  private String email; 
-  private String password;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = "First name is mandatory")
+    private String firstName;
+
+    @NotBlank(message = "Last name is mandatory")
+    private String lastName;
+
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is mandatory")
+    private String email;
+
+    @NotBlank(message = "Username is mandatory")
+    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+    private String username;
+
+    @NotBlank(message = "Password is mandatory")
+    @Size(min = 6, message = "Password must be at least 6 characters")
+    private String password;
 }
