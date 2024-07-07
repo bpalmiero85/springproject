@@ -32,7 +32,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User loginUser) {
         if (loginUser.getUsername() == null || loginUser.getUsername().isEmpty() ||
-                loginUser.getPassword() == null || loginUser.getPassword().isEmpty()) {
+            loginUser.getPassword() == null || loginUser.getPassword().isEmpty()) {
             return ResponseEntity.badRequest().body("Username and password must be provided");
         }
 
@@ -54,5 +54,4 @@ public class UserController {
         }
         return ResponseEntity.ok(user);
     }
-
 }
