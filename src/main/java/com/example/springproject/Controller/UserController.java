@@ -54,4 +54,14 @@ public class UserController {
         }
         return ResponseEntity.ok(user);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
+        User user = userServiceImpl.findUserById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        userServiceImpl.deleteUserById(id);
+        return ResponseEntity.ok("User deleted successfully");
+    }
 }
