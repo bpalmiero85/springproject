@@ -1,0 +1,46 @@
+.user-info-page-container {
+  background-color: rgba(253, 197, 124, 0.654);
+  justify-content: center;
+  align-items: center; /* Center content vertically */
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+.user-info-header {
+  margin-top: 10%;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.user-info-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the left */
+  margin-top: 20%;
+  text-align: left; /* Ensure text is aligned to the left */
+  background-color: lightblue;
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.user-info-field-inputs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.user-info-field {
+  display: flex;
+  justify-content: space-between; /* Align input field tags and buttons */
+  width: 100%;
+  margin: 10px 0; /* Add some margin between fields */
+}
+
+.user-info-field strong {
+  margin-right: auto; /* Push the strong tag to the left */
+}
+
+.edit-button {
+  margin-left: auto; /* Push the button to the right */
+}
