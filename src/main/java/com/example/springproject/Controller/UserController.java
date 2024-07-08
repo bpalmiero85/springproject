@@ -21,8 +21,17 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> signup(@RequestBody User user) {
-        if (userServiceImpl.findByUsername(user.getUsername()) != null) {
-            return ResponseEntity.badRequest().body("Username already exists");
+        if (user.getUsername() == null || user.getUsername().isEmpty() || 
+            user.getPassword() == null || user.getPassword().isEmpty() ||
+            user.getEmail() == null || user.getEmail().isEmpty() ||
+            user.getFirstName() == null || user.getFirstName().isEmpty() ||
+            user.getLastName() == null || user.getLastName().isEmpty()) {
+            return ResponseEntity.badRequest().body("All fields must be provided");
+
+          
+            }   
+        if(userServiceImpl.findByUsername(user.getUsername()) != null){
+                return ResponseEntity.badRequest().body("Username already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userServiceImpl.save(user);
