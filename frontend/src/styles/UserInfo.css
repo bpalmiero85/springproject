@@ -1,14 +1,15 @@
 .user-info-page-container {
   background-color: rgba(253, 197, 124, 0.654);
   justify-content: center;
-  align-items: center; /* Center content vertically */
+  align-items: center; 
   display: flex;
   width: 100vw;
   height: 100vh;
 }
 
 .user-info-header {
-  margin-top: 10%;
+  position: absolute;
+  margin-top: -10%;
   text-align: center;
   text-decoration: underline;
 }
@@ -16,9 +17,9 @@
 .user-info-box {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Align items to the left */
+  align-items: flex-start; 
   margin-top: 20%;
-  text-align: left; /* Ensure text is aligned to the left */
+  text-align: left; 
   background-color: lightblue;
   border-radius: 15px;
   padding: 15px;
@@ -32,9 +33,9 @@
 
 .user-info-field {
   display: flex;
-  justify-content: space-between; /* Align input field tags and buttons */
+  justify-content: space-between; 
   width: 100%;
-  margin: 10px 0; /* Add some margin between fields */
+  margin: 10px 0; 
 }
 
 .user-info-field strong {

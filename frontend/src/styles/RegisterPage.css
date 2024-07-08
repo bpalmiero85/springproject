@@ -1,0 +1,101 @@
+.register-background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.register-container {
+  
+  height:320px;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+  margin-top: -378px;
+  margin-left: -35px;
+  background-color: rgba(173, 216, 230, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 255, 0.2);
+}
+
+.register-title {
+  position: fixed;
+  font-size: 24px;
+  margin-bottom: 650px;
+}
+
+.register-title h2{
+  color: #000000;
+}
+
+.register-fields {
+  position: relative;
+  top: 80px;
+  margin-top: -10px;
+  width: 100%;
+  padding-top: -10px;
+ 
+}
+
+.register-fields div {
+  margin-bottom: 15px;
+}
+
+.register-username,
+.register-password,
+.register-firstName,
+.register-lastName,
+.register-email {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.register-label {
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: rgb(0, 0, 0);
+}
+
+.register-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: rgba(173, 216, 230, 0.2);
+}
+
+.register-buttons {
+  text-align: center;
+  margin-top: 150px;
+}
+
+.register-button {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #3f4363;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.register-button:hover {
+  background-color: #059647;
+  color: #ffffff;
+  border: none;
+}
