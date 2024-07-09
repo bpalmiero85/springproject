@@ -1,0 +1,10 @@
+.welcome-message{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  justify-content: center;
+}
+
+.welcome-header{
+  text-align: center;
+}
