@@ -1,0 +1,10 @@
+.home-message{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  justify-content: center;
+}
+
+.home-header{
+  text-align: center;
+}
