@@ -6,6 +6,7 @@ import WelcomePage from "./pages/WelcomePage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import LogoutPage from "./pages/LogoutPage";
+import ActiveUsers from "./components/ActiveUsers"; 
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/homepage" element={<HomePage />} />
         <Route path="/logout" element={<LogoutPage />} />
+        <Route path="/active-users" element={<ActiveUsers />} /> 
       </Routes>
     </Router>
   );

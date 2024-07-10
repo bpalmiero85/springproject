@@ -7,7 +7,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [, setCookie] = useCookies(["user"]);
+  const [, setCookie] = useCookies(["user"]); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,7 +18,6 @@ const LoginPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-
         body: JSON.stringify({
           username,
           password,
@@ -39,10 +38,6 @@ const LoginPage = () => {
     }
   };
 
-  const handleRegister = () => {
-    navigate("/register");
-  };
-
   return (
     <div className="login-background">
       <div className="login-title">
@@ -52,24 +47,22 @@ const LoginPage = () => {
         <form onSubmit={handleLogin}>
           <div className="login-fields">
             <div className="login-username">
-              <div className="login-password">
-                <label className="login-label">Username: </label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="login-input"
-                />
-              </div>
-              <div className="login-password">
-                <label className="login-label">Password: </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="login-input"
-                />
-              </div>
+              <label className="login-label">Username: </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="login-input"
+              />
+            </div>
+            <div className="login-password">
+              <label className="login-label">Password: </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="login-input"
+              />
             </div>
             <button
               type="submit"
@@ -77,13 +70,6 @@ const LoginPage = () => {
               onClick={handleLogin}
             >
               Login
-            </button>
-            <button
-              type="submit"
-              className="login-button"
-              onClick={handleRegister}
-            >
-              Sign Up
             </button>
           </div>
         </form>
