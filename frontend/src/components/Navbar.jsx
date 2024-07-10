@@ -1,31 +1,38 @@
 import "../styles/Navbar.css";
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import UserInfo from '../pages/UserInfo';
-import { useCookies } from 'react-cookie';
-
-
+import React from "react";
+import { Link } from "react-router-dom";
+import FetchUser from "../components/FetchUser";
+import { useCookies } from "react-cookie";
 
 function Navbar() {
-  const [firstName, setFirstName] = useState(null);
-  const [cookie, getCookie] = useCookies(["user"]);
+  const { user, error } = FetchUser();
+  const [, removeCookie] = useCookies(['user']);
 
-  
-useEffect(() => {
-  console.log(cookie.fistName)
-  setFirstName(cookie.firstName)
+  if (error) {
+    return <div>{error}</div>;
+  }
 
-},[]);
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
+  const handleLogout = () => {
+    removeCookie('user');
+  };
 
   return (
     <div className="navbar">
       <div>
-        <Link to="/login">Login</Link>
-        <Link to="/homepage">Home</Link>
-        <Link to="/logout">Sign Out</Link>
+        <Link to="/login">Sign In</Link>
+        <Link
+          to={
+            user.username ? `/homepage?username=${user.username}` : "/register"
+          }
+        >
+          Home
+        </Link>
         <Link to="/register">Register</Link>
-        
+        <Link to={`/logout?username=${user.username}`} onClick={handleLogout}>Sign Out</Link>
       </div>
     </div>
   );

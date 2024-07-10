@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import "../styles/WelcomePage.css";
-import Navbar from "../components/Navbar";
+import { useEffect, useState } from "react";
 
-const WelcomePage = () => {
+function FetchUser() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const username = searchParams.get("username");
@@ -38,23 +36,7 @@ const WelcomePage = () => {
     }
   }, [username]);
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  return { user, error };
+}
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div className="welcome-message">
-      <Navbar />
-      <h1 className="welcome-header">
-        Welcome, <span>{user.firstName}</span>!
-      </h1>
-      <p>You now have access to this application.</p>
-    </div>
-  );
-};
-
-export default WelcomePage;
+export default FetchUser;
