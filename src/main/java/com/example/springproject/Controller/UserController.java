@@ -27,12 +27,12 @@ public class UserController {
             user.getFirstName() == null || user.getFirstName().isEmpty() ||
             user.getLastName() == null || user.getLastName().isEmpty()) {
             return ResponseEntity.badRequest().body("All fields must be provided");
-
-          
-            }   
-        if(userServiceImpl.findByUsername(user.getUsername()) != null){
-                return ResponseEntity.badRequest().body("Username already exists");
         }
+        
+        if(userServiceImpl.findByUsername(user.getUsername()) != null){
+            return ResponseEntity.badRequest().body("Username already exists");
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userServiceImpl.save(user);
         return ResponseEntity.ok("User registered successfully");
@@ -51,6 +51,8 @@ public class UserController {
             return ResponseEntity.status(401).body("Invalid username or password");
         }
     }
+
+    
 
     @GetMapping("/userinfo")
     public ResponseEntity<?> userInfo(@RequestParam(required = false) String username) {

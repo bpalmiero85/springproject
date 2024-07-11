@@ -1,10 +1,14 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 import "../styles/LogoutPage.css";
-import FetchUser from "../components/FetchUser";
+import useFetchUser from "./components/FetchUser";
 
 const LogoutPage = () => {
-  const { user, error } = FetchUser();
+  const { user, error } = useFetchUser();
+  const navigate = useNavigate();
+
+  navigate(`/logout?username=${user.username}`)
+
 
 
   if (error) {
@@ -16,9 +20,9 @@ const LogoutPage = () => {
   }
 
 
+
   return (
     <div className="logout-container">
-      <Navbar />
       <div className="logout-message">
         <h3>
           We hope to see you again soon, <span>{user.firstName}</span>. Goodbye!

@@ -1,4 +1,6 @@
 .user-info-page-container {
+  margin-top: 35px;
+  position: absolute;
   background-color: rgba(253, 197, 124, 0.654);
   justify-content: center;
   align-items: center; 
@@ -8,21 +10,24 @@
 }
 
 .user-info-header {
-  position: absolute;
-  margin-top: -10%;
+  position: fixed;
+  margin-top: -45%;
   text-align: center;
   text-decoration: underline;
+  z-index: 2;
 }
 
 .user-info-box {
-  display: flex;
+  position: fixed;
+  display: inline-block;
   flex-direction: column;
   align-items: flex-start; 
-  margin-top: 20%;
+  margin-top: -20%;
   text-align: left; 
-  background-color: lightblue;
+  background-color: rgba(173, 216, 230, 0.749);
   border-radius: 15px;
   padding: 15px;
+  z-index: 1;
 }
 
 .user-info-field-inputs {
@@ -39,9 +44,6 @@
 }
 
 .user-info-field strong {
-  margin-right: auto; /* Push the strong tag to the left */
+  margin-right: auto; 
 }
 
-.edit-button {
-  margin-left: auto; /* Push the button to the right */
-}

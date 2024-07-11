@@ -13,6 +13,7 @@
   justify-content: space-between;
   font-family: 'Arial', sans-serif;
   z-index: 1000;
+  margin: 0px 0px 20px;
 }
 
 .navbar a {
