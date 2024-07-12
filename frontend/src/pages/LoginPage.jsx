@@ -27,8 +27,7 @@ const LoginPage = () => {
       });
 
       if (response.ok) {
-        const data = await response.text();
-        setCookie("user", username);
+        setCookie("user", username, { path: '/'});
         navigate(`/homepage?username=${username}`);
       } else {
         const errorText = await response.text();

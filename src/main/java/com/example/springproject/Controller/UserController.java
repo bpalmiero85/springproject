@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.springproject.Models.User;
 import com.example.springproject.UserService.UserServiceImpl;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -50,6 +52,12 @@ public class UserController {
         } else {
             return ResponseEntity.status(401).body("Invalid username or password");
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok("Logout successful");
     }
 
     
