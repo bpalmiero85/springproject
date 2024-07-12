@@ -7,6 +7,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
   const [, setCookie] = useCookies(["user"]);
 
   const handleLogin = async (e) => {
@@ -27,7 +28,10 @@ const LoginPage = () => {
       });
 
       if (response.ok) {
-        setCookie("user", username, { path: '/'});
+        setCookie("user", username);
+
+        setCookie("user", username, { path: "/" });
+
         navigate(`/homepage?username=${username}`);
       } else {
         const errorText = await response.text();
@@ -36,10 +40,6 @@ const LoginPage = () => {
     } catch (error) {
       console.error("Error logging in", error);
     }
-  };
-
-  const handleRegister = () => {
-    navigate("/register");
   };
 
   return (
@@ -51,24 +51,22 @@ const LoginPage = () => {
         <form onSubmit={handleLogin}>
           <div className="login-fields">
             <div className="login-username">
-              <div className="login-password">
-                <label className="login-label">Username: </label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="login-input"
-                />
-              </div>
-              <div className="login-password">
-                <label className="login-label">Password: </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="login-input"
-                />
-              </div>
+              <label className="login-label">Username: </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="login-input"
+              />
+            </div>
+            <div className="login-password">
+              <label className="login-label">Password: </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="login-input"
+              />
             </div>
             <button
               type="submit"
@@ -76,13 +74,6 @@ const LoginPage = () => {
               onClick={handleLogin}
             >
               Login
-            </button>
-            <button
-              type="submit"
-              className="login-button"
-              onClick={handleRegister}
-            >
-              Sign Up
             </button>
           </div>
         </form>

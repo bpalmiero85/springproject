@@ -6,8 +6,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.springproject.Models.User;
+import com.example.springproject.UserService.SessionTrackingService;
 import com.example.springproject.UserService.UserServiceImpl;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RestController
@@ -21,6 +23,9 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private SessionTrackingService sessionTrackingService;
+
     @PostMapping("/register")
     public ResponseEntity<String> signup(@RequestBody User user) {
         if (user.getUsername() == null || user.getUsername().isEmpty() || 
@@ -30,24 +35,25 @@ public class UserController {
             user.getLastName() == null || user.getLastName().isEmpty()) {
             return ResponseEntity.badRequest().body("All fields must be provided");
         }
-        
         if(userServiceImpl.findByUsername(user.getUsername()) != null){
             return ResponseEntity.badRequest().body("Username already exists");
         }
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userServiceImpl.save(user);
         return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User loginUser) {
+    public ResponseEntity<String> login(HttpServletRequest request, @RequestBody User loginUser) {
         if (loginUser.getUsername() == null || loginUser.getUsername().isEmpty() ||
             loginUser.getPassword() == null || loginUser.getPassword().isEmpty()) {
             return ResponseEntity.badRequest().body("Username and password must be provided");
         }
 
         if (userServiceImpl.verifyUserCredentials(loginUser.getUsername(), loginUser.getPassword())) {
+            HttpSession session = request.getSession(true);
+            session.setAttribute("username", loginUser.getUsername());
+            sessionTrackingService.addSession(session.getId(), loginUser.getUsername());
             return ResponseEntity.ok("Login successful");
         } else {
             return ResponseEntity.status(401).body("Invalid username or password");
@@ -55,12 +61,14 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpSession session) {
-        session.invalidate();
-        return ResponseEntity.ok("Logout successful");
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            sessionTrackingService.removeSession(session.getId());
+            session.invalidate();
+        }
+        return ResponseEntity.ok("Logged out");
     }
-
-    
 
     @GetMapping("/userinfo")
     public ResponseEntity<?> userInfo(@RequestParam(required = false) String username) {
@@ -72,6 +80,11 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/active-users")
+    public ResponseEntity<Integer> getActiveUsers() {
+        return ResponseEntity.ok(sessionTrackingService.getActiveSessions());
     }
 
     @DeleteMapping("/{id}")

@@ -25,6 +25,7 @@ const HomePage = () => {
           Hello, {user.firstName ? user.firstName : "Name unavailable"}! What would you like to do?
         </p>
       </div>
+
     </div>
   );
 };
