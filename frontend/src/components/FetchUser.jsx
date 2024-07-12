@@ -1,7 +1,11 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-function FetchUser() {
+
+
+
+function useFetchUser() {
+
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const username = searchParams.get("username");
@@ -9,7 +13,11 @@ function FetchUser() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+
     console.log("Username:", username);
+
+    console.log("Username:", username); 
+
     const fetchUser = async () => {
       try {
         const response = await fetch(
@@ -21,7 +29,11 @@ function FetchUser() {
         );
         if (response.ok) {
           const userData = await response.json();
+
           console.log("User Data:", userData);
+
+          console.log("User Data:", userData);   
+
           setUser(userData);
         } else {
           setError("Error fetching user info");
@@ -39,4 +51,8 @@ function FetchUser() {
   return { user, error };
 }
 
-export default FetchUser;
+
+
+
+export default useFetchUser;
+

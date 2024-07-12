@@ -64,3 +64,71 @@
   color: white;
   font-size: 20px;
 } 
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100vw;
+  max-height: 100%;
+  max-width: 100%;
+  background-color: #033645;
+  overflow: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Arial', sans-serif;
+  z-index: 1000;
+  margin: 0px 0px 20px;
+}
+
+.navbar a {
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  transition: color 0.3s;
+  padding: 20px;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  color: #14877f;
+  background-color: transparent;
+}
+
+.navbar .nav-item {
+  padding: 0;
+}
+
+.navbar .nav-item i {
+  margin-right: 4px;
+}
+
+.title {
+  font-size: large;
+  text-align: center;
+  margin-left: 1%;
+  padding-bottom: 25px;
+  margin-bottom: 25px;
+}
+
+.active {
+  background-color: #5fadc3;
+}
+
+.title-name {
+  font-size: 22px;
+  
+}
+
+.links-container {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 3px;
+}
+
+.navbar-title {
+  color: white;
+  font-size: 20px;
+} 

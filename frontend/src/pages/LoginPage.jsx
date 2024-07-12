@@ -7,7 +7,8 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [, setCookie] = useCookies(["user"]); 
+
+  const [, setCookie] = useCookies(["user"]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,6 +19,7 @@ const LoginPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
           username,
           password,
@@ -26,8 +28,10 @@ const LoginPage = () => {
       });
 
       if (response.ok) {
-        const data = await response.text();
         setCookie("user", username);
+
+        setCookie("user", username, { path: "/" });
+
         navigate(`/homepage?username=${username}`);
       } else {
         const errorText = await response.text();
