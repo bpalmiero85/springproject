@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import LogoutPage from './pages/LogoutPage';
 import RegisterPage from './pages/RegisterPage';
 import WelcomePage from './pages/WelcomePage';
+import ActiveUsers from "./components/ActiveUsers";
 import Navbar from './components/Navbar';
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/welcome" element={<WelcomePage />} />
         <Route path="/userinfo" element={<UserInfo />} />
         <Route path="/logout" element={<LogoutPage />} />
+        <Route path="/active-users" element={<ActiveUsers />} />
       </Routes>
     </Router>
   );

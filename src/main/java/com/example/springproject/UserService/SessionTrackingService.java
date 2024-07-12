@@ -1,36 +1,37 @@
 package com.example.springproject.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.example.springproject.Models.UserSession;
-import com.example.springproject.Repositories.UserSessionRepository;
-
-import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class SessionTrackingService {
-    @Autowired
-    private UserSessionRepository userSessionRepository;
 
-    @Transactional
+    private static final Logger logger = LoggerFactory.getLogger(SessionTrackingService.class);
+
+    private ConcurrentHashMap<String, String> activeSessions = new ConcurrentHashMap<>();
+    private AtomicInteger activeUserCount = new AtomicInteger(0);
+
     public void addSession(String sessionId, String username) {
-        UserSession session = new UserSession();
-        session.setSessionId(sessionId);
-        session.setUsername(username);
-        session.setLastAccessed(LocalDateTime.now());
-        userSessionRepository.save(session);
+        activeSessions.put(sessionId, username);
+        int currentCount = activeUserCount.incrementAndGet();
+        logger.info("Session added: {} | Username: {} | Active User Count: {}", sessionId, username, currentCount);
     }
 
-    @Transactional
     public void removeSession(String sessionId) {
-        userSessionRepository.deleteById(sessionId);
+        String username = activeSessions.remove(sessionId);
+        if (username != null) {
+            int currentCount = activeUserCount.decrementAndGet();
+            logger.info("Session removed: {} | Username: {} | Active User Count: {}", sessionId, username, currentCount);
+        }
     }
 
-    @Transactional
     public int getActiveSessions() {
-        return (int) userSessionRepository.count();
+        int currentCount = activeUserCount.get();
+        logger.info("Getting Active User Count: {}", currentCount);
+        return currentCount;
     }
 }

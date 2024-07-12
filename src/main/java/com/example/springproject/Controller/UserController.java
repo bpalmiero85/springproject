@@ -1,5 +1,7 @@
 package com.example.springproject.Controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpSession;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private UserServiceImpl userServiceImpl;
 
@@ -27,7 +31,7 @@ public class UserController {
     private SessionTrackingService sessionTrackingService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> signup(@RequestBody User user) {
+    public ResponseEntity<String> signup(HttpServletRequest request, @RequestBody User user) {
         if (user.getUsername() == null || user.getUsername().isEmpty() || 
             user.getPassword() == null || user.getPassword().isEmpty() ||
             user.getEmail() == null || user.getEmail().isEmpty() ||
@@ -40,7 +44,14 @@ public class UserController {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userServiceImpl.save(user);
-        return ResponseEntity.ok("User registered successfully");
+
+       
+        HttpSession session = request.getSession(true);
+        session.setAttribute("username", user.getUsername());
+        sessionTrackingService.addSession(session.getId(), user.getUsername());
+        logger.info("User registered and logged in: {}", user.getUsername());
+
+        return ResponseEntity.ok("User registered and logged in successfully");
     }
 
     @PostMapping("/login")
@@ -54,6 +65,7 @@ public class UserController {
             HttpSession session = request.getSession(true);
             session.setAttribute("username", loginUser.getUsername());
             sessionTrackingService.addSession(session.getId(), loginUser.getUsername());
+            logger.info("User logged in: {}", loginUser.getUsername());
             return ResponseEntity.ok("Login successful");
         } else {
             return ResponseEntity.status(401).body("Invalid username or password");
@@ -64,8 +76,10 @@ public class UserController {
     public ResponseEntity<String> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
+            String username = (String) session.getAttribute("username");
             sessionTrackingService.removeSession(session.getId());
             session.invalidate();
+            logger.info("User logged out: {}", username);
         }
         return ResponseEntity.ok("Logged out");
     }
@@ -83,8 +97,15 @@ public class UserController {
     }
 
     @GetMapping("/active-users")
-    public ResponseEntity<Integer> getActiveUsers() {
-        return ResponseEntity.ok(sessionTrackingService.getActiveSessions());
+    public ResponseEntity<Integer> getActiveUsers(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            String username = (String) session.getAttribute("username");
+            logger.info("Fetch active user: username = {}", username);
+        }
+        int activeUsers = sessionTrackingService.getActiveSessions();
+        logger.info("Active users count: {}", activeUsers);
+        return ResponseEntity.ok(activeUsers);
     }
 
     @DeleteMapping("/{id}")

@@ -7,6 +7,7 @@ const ActiveUsers = () => {
     try {
       const response = await fetch('http://localhost:8080/user/active-users', { credentials: 'include' });
       const data = await response.json();
+      console.log('Fetched active users:', data);  
       setActiveUsers(data);
     } catch (error) {
       console.error('Error fetching active users:', error);
