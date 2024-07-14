@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import '../styles/UserInfo.css';
 
+
 const UserInfo = () => {
     const location = useLocation();
     const username = new URLSearchParams(location.search).get('username');

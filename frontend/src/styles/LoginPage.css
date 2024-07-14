@@ -1,10 +1,9 @@
-.login-background{
+.login-background {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url("");
-  background-size: contain;
-  background-position: center;
+  background-image: url("../images/orb-background.jpg");
+  background-size: cover; 
   background-repeat: no-repeat;
   height: 100vh;
   width: 100vw;
@@ -13,10 +12,89 @@
   overflow: hidden;
 }
 
-.register-container{
-  height: 320px;
-  width: 340px;
+.login-container {
+  height: auto; 
+  min-height: 700px; 
+  width: 390px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 255, 0.204);
+  border: 4px solid rgba(0, 87, 226, 0.863);
+  border-radius: 10px;
+  padding: 20px;
+
+}
+
+.login-field-container {
+  width: 80%;
+}
+
+.login-title {
+  position: absolute;
+  font-size: 24px;
+  margin-bottom: 500px;
+}
+
+.login-title h2 {
+  justify-content: center;
+  text-decoration: underline;
+  color: #000000;
+}
+
+.login-fields {
+  width: 100%;
+  margin-top: -20px;
+}
+
+.login-fields div {
+  margin-bottom: 15px;
+}
+
+.login-username,
+.login-password {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+}
+
+.login-label {
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: rgb(0, 0, 0);
+}
+
+.login-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: rgb(255, 255, 255);
+}
+
+.login-buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-button {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #32b1c7;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.login-button:hover {
+  background-color: #136b9e;
+  color: #ffffff;
+  border: none;
 }

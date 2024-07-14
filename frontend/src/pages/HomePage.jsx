@@ -3,6 +3,7 @@ import "../styles/HomePage.css";
 import useFetchUser from "../components/FetchUser";
 
 
+
 const HomePage = () => {
   const { user, error } = useFetchUser();
 

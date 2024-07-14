@@ -10,6 +10,10 @@ const LoginPage = () => {
 
   const [, setCookie] = useCookies(["user"]);
 
+  const handleRegister = () => {
+    navigate('/register');
+  }
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -68,6 +72,7 @@ const LoginPage = () => {
                 className="login-input"
               />
             </div>
+            <div className="login-label">
             <button
               type="submit"
               className="login-button"
@@ -75,6 +80,14 @@ const LoginPage = () => {
             >
               Login
             </button>
+              <button 
+                type="button"
+                className="login-button"
+                onClick={handleRegister}
+            >
+            Sign up
+            </button>
+          </div>
           </div>
         </form>
       </div>

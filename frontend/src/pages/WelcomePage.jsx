@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "../styles/WelcomePage.css";
-import Navbar from "../components/Navbar";
+
 
 const WelcomePage = () => {
   const location = useLocation();
@@ -48,7 +48,6 @@ const WelcomePage = () => {
 
   return (
     <div className="welcome-message">
-      <Navbar />
       <h1 className="welcome-header">
         Welcome, <span>{user.firstName}</span>!
       </h1>
