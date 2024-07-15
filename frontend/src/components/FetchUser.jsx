@@ -14,10 +14,6 @@ function useFetchUser() {
 
   useEffect(() => {
 
-    console.log("Username:", username);
-
-    console.log("Username:", username); 
-
     const fetchUser = async () => {
       try {
         const response = await fetch(
@@ -29,12 +25,7 @@ function useFetchUser() {
         );
         if (response.ok) {
           const userData = await response.json();
-
-          console.log("User Data:", userData);
-
-          console.log("User Data:", userData);   
-
-          setUser(userData);
+           setUser(userData);
         } else {
           setError("Error fetching user info");
         }
@@ -48,7 +39,7 @@ function useFetchUser() {
     }
   }, [username]);
 
-  return { user, error };
+  return { user, error, setUser };
 }
 
 

@@ -10,7 +10,7 @@
 }
 
 .user-info-header {
-  position: fixed;
+  position: relative;
   margin-top: -45%;
   text-align: center;
   text-decoration: underline;
@@ -45,5 +45,9 @@
 
 .user-info-field strong {
   margin-right: auto; 
+}
+
+.email-validation-error {
+  color: red;
 }
 

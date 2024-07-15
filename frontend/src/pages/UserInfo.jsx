@@ -6,6 +6,8 @@ const UserInfo = () => {
   const location = useLocation();
   const username = new URLSearchParams(location.search).get("username");
   const [user, setUser] = useState(null);
+  const [originalInfo, setOriginalInfo] = useState(null);
+  const [validationError, setValidationError] = useState(null);
   const [error, setError] = useState(null);
   const [isEdit, setIsEdit] = useState({
     firstName: false,
@@ -26,6 +28,7 @@ const UserInfo = () => {
         if (response.ok) {
           const userData = await response.json();
           setUser(userData);
+          setOriginalInfo(userData);
         } else {
           setError("Error fetching user info");
         }
@@ -47,20 +50,33 @@ const UserInfo = () => {
     setUser((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSave = async (field) => {
+  const validateEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
+  const handleSave = async (field, e) => {
+    e.preventDefault();
+
+    if (field === "email" && !validateEmail(user.email)) {
+      setValidationError("Valid email required");
+      return;
+    }
+    setValidationError(null);
     try {
       const response = await fetch("http://localhost:8080/user/update", {
-        method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...user, [field]: user[field] }),
+        body: JSON.stringify(user),
         credentials: "include",
       });
 
       if (response.ok) {
         const updatedUser = await response.json();
         setUser(updatedUser);
+        setOriginalInfo(updatedUser);
         setIsEdit((prev) => ({ ...prev, [field]: false }));
       } else {
         setError("Error updating user info");
@@ -68,6 +84,11 @@ const UserInfo = () => {
     } catch (error) {
       setError("Error updating user info");
     }
+  };
+
+  const handleCancel = (field) => {
+    setUser((prev) => ({ ...prev, [field]: originalInfo[field] }));
+    setIsEdit((prev) => ({ ...prev, [field]: false }));
   };
 
   if (error) {
@@ -86,66 +107,105 @@ const UserInfo = () => {
           <div className="user-info-field">
             <strong>First Name:</strong>
             {isEdit.firstName ? (
-              <input
-                type="text"
-                value={user.firstName}
-                onChange={(e) => handleChange("firstName", e.target.value)}
-              />
+              <div>
+                <input
+                  type="text"
+                  value={user.firstName}
+                  onChange={(e) => handleChange("firstName", e.target.value)}
+                />
+                <button
+                  className="user-edit-button"
+                  onClick={(e) => handleSave("firstName", e)}
+                >
+                  Save
+                </button>
+                <button
+                  className="user-cancel-button"
+                  onClick={() => handleCancel("firstName")}
+                >
+                  Cancel
+                </button>
+              </div>
             ) : (
-              <span>{user.firstName}</span>
+              <div>
+                <span>{user.firstName}</span>
+                <button
+                  className="user-edit-button"
+                  onClick={() => handleEdit("firstName")}
+                >
+                  Edit
+                </button>
+              </div>
             )}
-            <button
-              className="user-edit-button"
-              onClick={(e) =>
-                isEdit.firstName
-                  ? handleSave("firstName")
-                  : handleEdit("firstName")
-              }
-            >
-              {isEdit.firstName ? "Save" : "Edit"}
-            </button>
           </div>
           <div className="user-info-field">
             <strong>Last Name:</strong>
             {isEdit.lastName ? (
-              <input
-                type="text"
-                value={user.lastName}
-                onChange={(e) => handleChange("lastName", e.target.value)}
-              />
+              <div>
+                <input
+                  type="text"
+                  value={user.lastName}
+                  onChange={(e) => handleChange("lastName", e.target.value)}
+                />
+                <button
+                  className="user-edit-button"
+                  onClick={(e) => handleSave("lastName", e)}
+                >
+                  Save
+                </button>
+                <button
+                  className="user-cancel-button"
+                  onClick={() => handleCancel("lastName")}
+                >
+                  Cancel
+                </button>
+              </div>
             ) : (
-              <span>{user.lastName}</span>
+              <div>
+                <span>{user.lastName}</span>
+                <button
+                  className="user-edit-button"
+                  onClick={() => handleEdit("lastName")}
+                >
+                  Edit
+                </button>
+              </div>
             )}
-            <button
-              className="user-edit-button"
-              onClick={(e) =>
-                isEdit.lastName
-                  ? handleSave("lastName")
-                  : handleEdit("lastName")
-              }
-            >
-              {isEdit.lastName ? "Save" : "Edit"}
-            </button>
           </div>
           <div className="user-info-field">
             <strong>Email:</strong>
             {isEdit.email ? (
-              <input
-                type="email"
-                value={user.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-              />
+              <div>
+                <input
+                  type="email"
+                  value={user.email}
+                  onChange={(e) => handleChange("email", e.target.value)}
+                />
+                {validationError && <div className="email-validation-error">{validationError}</div>}
+                <button
+                  className="user-edit-button"
+                  onClick={(e) => handleSave("email", e)}
+                >
+                  Save
+                </button>
+                <button
+                  className="user-cancel-button"
+                  onClick={() => handleCancel("email")}
+                >
+                  Cancel
+                </button>
+              </div>
             ) : (
-              <span>{user.email}</span>
+              <div>
+                <span>{user.email}</span>
+                <button
+                  className="user-edit-button"
+                  onClick={() => handleEdit("email")}
+                >
+                  Edit
+                </button>
+              </div>
             )}
-            <button
-              className="user-edit-button"
-              onClick={(e) =>
-                isEdit.email ? handleSave("email") : handleEdit("email")
-              }
-            >
-              {isEdit.email ? "Save" : "Edit"}
-            </button>
           </div>
           <div className="user-info-field">
             <strong>Username:</strong>
