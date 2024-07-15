@@ -1,27 +1,6 @@
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 60px;
-  width: 100vw;
-  max-height: 100%;
-  max-width: 100%;
-  background-color: #033645;
-  overflow: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-family: 'Arial', sans-serif;
-  z-index: 1000;
-}
-
-.navbar a {
-  text-align: center;
-  color: white;
-  font-size: 20px;
-  transition: color 0.3s;
-  padding: 20px;
-  text-decoration: none;
+.edit-profile-link {
+  margin-left: auto;
+  font-size: 12px;
 }
 
 .navbar a:hover {
@@ -51,7 +30,6 @@
 
 .title-name {
   font-size: 22px;
-  
 }
 
 .links-container {
@@ -63,7 +41,7 @@
 .navbar-title {
   color: white;
   font-size: 20px;
-} 
+}
 
 .navbar {
   position: fixed;
@@ -78,7 +56,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   z-index: 1000;
   margin: 0px 0px 20px;
 }
@@ -119,7 +97,6 @@
 
 .title-name {
   font-size: 22px;
-  
 }
 
 .links-container {
@@ -131,4 +108,4 @@
 .navbar-title {
   color: white;
   font-size: 20px;
-} 
+}

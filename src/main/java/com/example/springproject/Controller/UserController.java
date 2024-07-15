@@ -45,7 +45,6 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userServiceImpl.save(user);
 
-       
         HttpSession session = request.getSession(true);
         session.setAttribute("username", user.getUsername());
         sessionTrackingService.addSession(session.getId(), user.getUsername());
@@ -94,6 +93,25 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        if (user.getUsername() == null || user.getUsername().isEmpty() || 
+            user.getEmail() == null || user.getEmail().isEmpty() ||
+            user.getFirstName() == null || user.getFirstName().isEmpty() ||
+            user.getLastName() == null || user.getLastName().isEmpty()) {
+            return ResponseEntity.badRequest().body("All fields must be provided");
+        }
+        User existingUser = userServiceImpl.findByUsername(user.getUsername());
+        if (existingUser == null) {
+            return ResponseEntity.notFound().build();
+        }
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setEmail(user.getEmail());
+        userServiceImpl.save(existingUser);
+        return ResponseEntity.ok(existingUser);
     }
 
     @GetMapping("/active-users")

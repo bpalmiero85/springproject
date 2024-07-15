@@ -1,7 +1,7 @@
 .user-info-page-container {
   margin-top: 35px;
   position: absolute;
-  background-color: rgba(253, 197, 124, 0.654);
+  background-color: white;
   justify-content: center;
   align-items: center; 
   display: flex;
@@ -24,7 +24,7 @@
   align-items: flex-start; 
   margin-top: -20%;
   text-align: left; 
-  background-color: rgba(173, 216, 230, 0.749);
+  background-color: rgba(173, 216, 230, 0.649);
   border-radius: 15px;
   padding: 15px;
   z-index: 1;

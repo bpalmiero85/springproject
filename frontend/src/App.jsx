@@ -13,7 +13,7 @@ import Navbar from './components/Navbar';
 
 const App = () => {
   const location = useLocation();
-  const hideNavbar = ['/register', '/', '/logout']
+  const hideNavbar = ['/register', '/', '/active-users']
   return (
       <div>
         {!hideNavbar.includes(location.pathname) && <Navbar />} 

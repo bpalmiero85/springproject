@@ -9,11 +9,32 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
   const [, setCookie] = useCookies(["user"]);
 
+  const validate = () => {
+    const newErrors = {};
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!firstName) newErrors.firstName = "First Name is required";
+    if (!lastName) newErrors.lastName = "Last Name is required";
+    if (!email || !emailPattern.test(email)) newErrors.email = "Valid Email is required";
+    if (!username) newErrors.username = "Username is required";
+    if (!password) newErrors.password = "Password is required";
+
+    return newErrors;
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
+    const validationErrors = validate();
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:8080/user/register", {
@@ -38,7 +59,7 @@ const RegisterPage = () => {
         navigate(`/welcome?username=${username}`);
       } else {
         const errorText = await response.text();
-        console.error(`Error: ${errorText}`);
+        setServerError(errorText);
       }
     } catch (error) {
       console.error("Error signing up", error);
@@ -51,7 +72,7 @@ const RegisterPage = () => {
         <div className="register-title">
           <h2>Sign Up</h2>
         </div>
-        <div className="text-field-container">
+        {serverError && <div className="register-server-error">{serverError}</div>}
           <form onSubmit={handleRegister}>
             <div className="register-fields">
               <div className="register-firstName">
@@ -60,8 +81,9 @@ const RegisterPage = () => {
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="register-input"
+                  className={`register-input ${errors.firstName ? "error" : ""}`}
                 />
+                {errors.firstName && <div className="register-error-message">{errors.firstName}</div>}
               </div>
               <div className="register-lastName">
                 <label className="register-label">Last Name: </label>
@@ -69,8 +91,9 @@ const RegisterPage = () => {
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className="register-input"
+                  className={`register-input ${errors.lastName ? "error" : ""}`}
                 />
+                {errors.lastName && <div className="register-error-message">{errors.lastName}</div>}
               </div>
               <div className="register-email">
                 <label className="register-label">Email: </label>
@@ -78,8 +101,9 @@ const RegisterPage = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="register-input"
+                  className={`register-input ${errors.email ? "error" : ""}`}
                 />
+                {errors.email && <div className="register-error-message">{errors.email}</div>}
               </div>
               <div className="register-username">
                 <label className="register-label">Username: </label>
@@ -88,8 +112,9 @@ const RegisterPage = () => {
                   value={username}
                   minLength="3"
                   onChange={(e) => setUsername(e.target.value)}
-                  className="register-input"
+                  className={`register-input ${errors.username ? "error" : ""}`}
                 />
+                {errors.username && <div className="register-error-message">{errors.username}</div>}
               </div>
               <div className="register-password">
                 <label className="register-label">Password: </label>
@@ -97,8 +122,9 @@ const RegisterPage = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="register-input"
+                  className={`register-input ${errors.password ? "error" : ""}`}
                 />
+                {errors.password && <div className="register-error-message">{errors.password}</div>}
               </div>
               <div className="register-buttons">
                 <button type="submit" className="register-button">
@@ -109,7 +135,6 @@ const RegisterPage = () => {
           </form>
         </div>
       </div>
-    </div>
   );
 };
 
