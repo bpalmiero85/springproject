@@ -11,6 +11,7 @@
   padding: 0;
   overflow: hidden;
 }
+
 .register-username,
 .register-password,
 .register-firstName,
@@ -33,7 +34,7 @@
   text-align: center;
   font-family: "Arial", sans-serif;
   box-sizing: border-box;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgb(255, 255, 255);
   border-radius: 10px;
   padding: 40px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -56,7 +57,7 @@
 }
 
 .register-fields div {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 .register-label {
@@ -80,16 +81,19 @@
   background-color: #ffe6e6;
 }
 
+.register-error-message-container {
+  height: 12px; 
+}
+
 .register-error-message {
   color: #ff4d4d;
   font-size: 12px;
-  margin-top: 5px;
+  margin-top: 2px;
 }
 
 .register-server-error {
   color: #ff4d4d;
   font-size: 16px;
-  margin-bottom: 20px;
 }
 
 .register-buttons {

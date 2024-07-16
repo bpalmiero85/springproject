@@ -42,6 +42,9 @@ public class UserController {
         if(userServiceImpl.findByUsername(user.getUsername()) != null){
             return ResponseEntity.badRequest().body("Username already exists");
         }
+        if(userServiceImpl.findByEmail(user, user.getEmail()) != null || user.getEmail().isEmpty()){
+            return ResponseEntity.badRequest().body("Email already exists");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userServiceImpl.save(user);
 

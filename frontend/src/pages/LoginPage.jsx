@@ -73,9 +73,11 @@ const LoginPage = () => {
                 onChange={(e) => setUsername(e.target.value)}
                 className={`login-input ${errors.username ? "error" : ""}`}
               />
-              {errors.username && (
-                <div className="login-error-message">{errors.username}</div>
-              )}
+              <div className="login-error-message-container">
+                {errors.username && (
+                  <div className="login-error-message">{errors.username}</div>
+                )}
+              </div>
             </div>
             <div className="login-password">
               <label className="login-label">Password: </label>
@@ -85,9 +87,11 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className={`login-input ${errors.password ? "error" : ""}`}
               />
-              {errors.password && (
-                <div className="login-error-message">{errors.password}</div>
-              )}
+              <div className="login-error-message-container">
+                {errors.password && (
+                  <div className="login-error-message">{errors.password}</div>
+                )}
+              </div>
             </div>
             <div className="login-buttons">
               <button type="submit" className="login-button">
