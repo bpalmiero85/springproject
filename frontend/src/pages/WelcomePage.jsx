@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "../styles/WelcomePage.css";
 
-
 const WelcomePage = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -51,7 +50,9 @@ const WelcomePage = () => {
       <h1 className="welcome-header">
         Welcome, <span>{user.firstName}</span>!
       </h1>
-      <p>You now have access to this application.</p>
+      <div className="welcome-paragraph">
+        <p>You now have access to this application.</p>
+      </div>
     </div>
   );
 };

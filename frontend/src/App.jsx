@@ -1,22 +1,25 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import UserInfo from './pages/UserInfo';
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import LogoutPage from './pages/LogoutPage';
-import RegisterPage from './pages/RegisterPage';
-import WelcomePage from './pages/WelcomePage';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+import UserInfo from "./pages/UserInfo";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import LogoutPage from "./pages/LogoutPage";
+import RegisterPage from "./pages/RegisterPage";
+import WelcomePage from "./pages/WelcomePage";
 import ActiveUsers from "./components/ActiveUsers";
-import Navbar from './components/Navbar';
-
-
+import Navbar from "./components/Navbar";
 
 const App = () => {
   const location = useLocation();
-  const hideNavbar = ['/register', '/', '/active-users']
+  const hideNavbar = ["/register", "/", "/active-users"];
   return (
-      <div>
-        {!hideNavbar.includes(location.pathname) && <Navbar />} 
+    <div>
+      {!hideNavbar.includes(location.pathname) && <Navbar />}
       <Routes>
         <Route path="/homepage" element={<HomePage />} />
         <Route path="/" element={<LoginPage />} />
@@ -26,16 +29,16 @@ const App = () => {
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/active-users" element={<ActiveUsers />} />
       </Routes>
-      </div>
+    </div>
   );
-}
+};
 
 const AppWrapper = () => {
   return (
     <Router>
       <App />
     </Router>
-  )
-}
+  );
+};
 
 export default AppWrapper;

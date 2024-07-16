@@ -1,17 +1,21 @@
 .user-info-page-container {
-  margin-top: 35px;
   position: absolute;
   background-color: white;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   display: flex;
-  width: 100vw;
-  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.user-edit-button {
+  margin-left: 15px;
 }
 
 .user-info-header {
-  position: relative;
-  margin-top: -45%;
+  position: static;
+  margin-top: -41%;
   text-align: center;
   text-decoration: underline;
   z-index: 2;
@@ -21,9 +25,9 @@
   position: fixed;
   display: inline-block;
   flex-direction: column;
-  align-items: flex-start; 
+  align-items: flex-start;
   margin-top: -20%;
-  text-align: left; 
+  text-align: left;
   background-color: rgba(173, 216, 230, 0.649);
   border-radius: 15px;
   padding: 15px;
@@ -38,16 +42,15 @@
 
 .user-info-field {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   width: 100%;
-  margin: 10px 0; 
+  margin: 10px 0;
 }
 
 .user-info-field strong {
-  margin-right: auto; 
+  margin-right: auto;
 }
 
 .email-validation-error {
   color: red;
 }
-

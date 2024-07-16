@@ -1,4 +1,4 @@
-.welcome-message{
+.welcome-message {
   width: 100vw;
   height: 100vh;
   margin-top: 70px;
@@ -6,6 +6,10 @@
   justify-content: center;
 }
 
-.welcome-header{
+.welcome-header {
+  text-align: center;
+}
+
+.welcome-paragraph {
   text-align: center;
 }

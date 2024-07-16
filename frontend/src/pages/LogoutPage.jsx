@@ -10,9 +10,9 @@ const LogoutPage = () => {
   useEffect(() => {
     const logout = async () => {
       try {
-        const response = await fetch('http://localhost:8080/user/logout', {
-          method: 'POST',
-          credentials: 'include'
+        const response = await fetch("http://localhost:8080/user/logout", {
+          method: "POST",
+          credentials: "include",
         });
         if (response.ok) {
           removeCookie("user");

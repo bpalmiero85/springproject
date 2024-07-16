@@ -101,7 +101,9 @@ const UserInfo = () => {
 
   return (
     <div className="user-info-page-container">
-      <h1 className="user-info-header">User Info</h1>
+      <div className="user-info-header">
+        <h1>User Info</h1>
+      </div>
       <div className="user-info-box">
         <div className="user-info-field-inputs">
           <div className="user-info-field">
@@ -113,6 +115,7 @@ const UserInfo = () => {
                   value={user.firstName}
                   onChange={(e) => handleChange("firstName", e.target.value)}
                 />
+
                 <button
                   className="user-edit-button"
                   onClick={(e) => handleSave("firstName", e)}
@@ -181,7 +184,11 @@ const UserInfo = () => {
                   value={user.email}
                   onChange={(e) => handleChange("email", e.target.value)}
                 />
-                {validationError && <div className="email-validation-error">{validationError}</div>}
+                {validationError && (
+                  <div className="email-validation-error">
+                    {validationError}
+                  </div>
+                )}
                 <button
                   className="user-edit-button"
                   onClick={(e) => handleSave("email", e)}

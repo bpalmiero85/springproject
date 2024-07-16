@@ -6,7 +6,7 @@ import { useCookies } from "react-cookie";
 
 function Navbar() {
   const { user, error } = FetchUser();
-  const [, removeCookie] = useCookies(['user']);
+  const [, removeCookie] = useCookies(["user"]);
   const location = useLocation();
 
   if (error) {
@@ -18,52 +18,94 @@ function Navbar() {
   }
 
   const handleLogout = () => {
-    removeCookie('user');
+    removeCookie("user");
   };
 
   const showNavLinks = () => {
     switch (location.pathname) {
-      case '/homepage':
+      case "/homepage":
         return (
-          <>
-            <Link to={`/logout?username=${user.username}`} onClick={handleLogout}>Sign Out</Link>
-            <Link to={`/userinfo?username=${user.username}`} className="edit-profile-link">Edit Profile</Link>
-          </>
+          <div className="links-container">
+            <Link
+              to={`/userinfo?username=${user.username}`}
+              className="edit-profile-link"
+            >
+              Edit Profile
+            </Link>
+            <Link
+              to={`/logout?username=${user.username}`}
+              onClick={handleLogout}
+            >
+              Sign Out
+            </Link>
+          </div>
         );
-      case '/welcome':
+      case "/welcome":
         return (
-          <>
-            <Link to={user.username ? `/homepage?username=${user.username}` : "/register"}>Home</Link>
-            <Link to={`/logout?username=${user.username}`} onClick={handleLogout}>Sign Out</Link>
-            <Link to={`/userinfo?username=${user.username}`} className="edit-profile-link">Edit Profile</Link>
-          </>
+          <div className="links-container">
+            <Link
+              to={
+                user.username
+                  ? `/homepage?username=${user.username}`
+                  : "/register"
+              }
+            >
+              Home
+            </Link>
+            <Link
+              to={`/userinfo?username=${user.username}`}
+              className="edit-profile-link"
+            >
+              Edit Profile
+            </Link>
+            <Link
+              to={`/logout?username=${user.username}`}
+              onClick={handleLogout}
+            >
+              Sign Out
+            </Link>
+          </div>
         );
-        case '/userinfo':
-          return (
-            <>
-              <Link to={user.username ? `/homepage?username=${user.username}` : "/register"}>Home</Link>
-              <Link to={`/logout?username=${user.username}`} onClick={handleLogout}>Sign Out</Link>
-            </>
-          );
-          case '/logout':
-            return(
-              <>
-                <Link to="/">Sign In</Link>
-              </>
-            );
+      case "/userinfo":
+        return (
+          <div className="links-container">
+            <Link
+              to={
+                user.username
+                  ? `/homepage?username=${user.username}`
+                  : "/register"
+              }
+            >
+              Home
+            </Link>
+            <Link
+              to={`/logout?username=${user.username}`}
+              onClick={handleLogout}
+            >
+              Sign Out
+            </Link>
+          </div>
+        );
+      case "/logout":
+        return (
+          <div className="links-container">
+            <Link to="/">Sign In</Link>
+          </div>
+        );
       default:
         return (
-          <>
+          <div className="links-container">
             <Link to="/">Sign In</Link>
-          </>
+          </div>
         );
-    } // end of switch
+    }
   };
 
   return (
     <div className="navbar">
+      <div className="navbar-title">My Application</div>
       {showNavLinks()}
-     </div>
+    </div>
   );
 }
 

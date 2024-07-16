@@ -1,4 +1,4 @@
-.logout-message{
+.logout-message {
   margin-top: 100px;
   margin-left: 35px;
   width: 100vw;
@@ -7,11 +7,11 @@
   justify-content: center;
 }
 
-.logout-header{
+.logout-header {
   text-align: center;
 }
 
-.login-title{
+.login-title {
   display: flex;
   text-align: center;
   margin-top: -20%;
