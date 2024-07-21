@@ -92,6 +92,12 @@ function Navbar() {
             <Link to="/">Sign In</Link>
           </div>
         );
+        case "/verify":
+        return (
+          <div className="links-container">
+            <Link to="/">Sign In</Link>
+          </div>
+        );
       default:
         return (
           <div className="links-container">

@@ -73,12 +73,12 @@ public class UserServiceImpl implements UserService {
 
     public void sendVerificationEmail(User user, String siteURL) throws UnsupportedEncodingException {
         String subject = "Please verify your registration";
-        String senderName = "Your Company Name";
+        String senderName = "Brian's App";
         String mailContent = "<p>Dear " + user.getFirstName() + ",</p>";
         mailContent += "<p>Please click the link below to verify your registration:</p>";
         String verifyURL = siteURL + "/user/verify?code=" + user.getVerificationCode() + "&username=" + user.getUsername();
         mailContent += "<h3><a href=\"" + verifyURL + "\">VERIFY</a></h3>";
-        mailContent += "<p>Thank you,<br>Your Company Name</p>";
+        mailContent += "<p>Thank you,<br>Brian's Application</p>";
     
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -95,5 +95,6 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Failed to send verification email");
         }
     }
+
     
 }

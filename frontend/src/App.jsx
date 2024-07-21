@@ -20,16 +20,12 @@ const App = () => {
   const [cookies] = useCookies(["user"]);
   const isVerified = cookies.user ? true : false;
   const location = useLocation();
-  const hideNavbar = ["/register", "/", "/active-users", "/verify"];
+  const hideNavbar = ["/register", "/", "/active-users"];
+
   return (
     <div>
       {!hideNavbar.includes(location.pathname) && <Navbar />}
       <Routes>
-        {isVerified ? (
-          <Route path="/welcome" element={<WelcomePage />} />
-        ) : (
-          <Route path="/register" element={<RegisterPage />} />
-        )}
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify" element={<VerificationPage />} />
@@ -37,6 +33,12 @@ const App = () => {
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/active-users" element={<ActiveUsers />} />
         <Route path="/homepage" element={<HomePage />} />
+
+        {isVerified ? (
+          <Route path="/welcome" element={<WelcomePage />} />
+        ) : (
+          <Route path="/register" element={<RegisterPage />} />
+        )}
       </Routes>
     </div>
   );
