@@ -2,8 +2,11 @@ package com.example.springproject.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +17,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -22,6 +27,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
+    private boolean enabled = false;
 
     @NotBlank(message = "First name is mandatory")
     private String firstName;
@@ -34,7 +44,7 @@ public class User {
     private String email;
 
     @NotBlank(message = "Username is mandatory")
-    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+    @Size(min = 3, max = 16, message = "Username must be between 3 and 16 characters")
     private String username;
 
     @NotBlank(message = "Password is mandatory")

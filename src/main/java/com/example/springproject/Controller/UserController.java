@@ -11,6 +11,8 @@ import com.example.springproject.Models.User;
 import com.example.springproject.UserService.SessionTrackingService;
 import com.example.springproject.UserService.UserServiceImpl;
 
+import java.io.UnsupportedEncodingException;
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -31,111 +33,177 @@ public class UserController {
     private SessionTrackingService sessionTrackingService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> signup(HttpServletRequest request, @RequestBody User user) {
-        if (user.getUsername() == null || user.getUsername().isEmpty() || 
-            user.getPassword() == null || user.getPassword().isEmpty() ||
-            user.getEmail() == null || user.getEmail().isEmpty() ||
-            user.getFirstName() == null || user.getFirstName().isEmpty() ||
-            user.getLastName() == null || user.getLastName().isEmpty()) {
-            return ResponseEntity.badRequest().body("All fields must be provided");
-        }
-        if(userServiceImpl.findByUsername(user.getUsername()) != null){
-            return ResponseEntity.badRequest().body("Username already exists");
-        }
-        if(userServiceImpl.findByEmail(user, user.getEmail()) != null || user.getEmail().isEmpty()){
-            return ResponseEntity.badRequest().body("Email already exists");
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userServiceImpl.save(user);
+    public ResponseEntity<String> signup(HttpServletRequest request, @RequestBody User user)
+            throws UnsupportedEncodingException {
+        try {
+            if (user.getUsername() == null || user.getUsername().isEmpty() ||
+                    user.getPassword() == null || user.getPassword().isEmpty() ||
+                    user.getEmail() == null || user.getEmail().isEmpty() ||
+                    user.getFirstName() == null || user.getFirstName().isEmpty() ||
+                    user.getLastName() == null || user.getLastName().isEmpty()) {
+                return ResponseEntity.badRequest().body("All fields must be provided");
+            }
+            if (userServiceImpl.findByUsername(user.getUsername()) != null) {
+                return ResponseEntity.badRequest().body("Username already exists");
+            }
+            if (userServiceImpl.findByEmail(user.getEmail()) != null) {
+                return ResponseEntity.badRequest().body("Email already exists");
+            }
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setVerificationCode(UUID.randomUUID().toString());
+            userServiceImpl.save(user);
 
-        HttpSession session = request.getSession(true);
-        session.setAttribute("username", user.getUsername());
-        sessionTrackingService.addSession(session.getId(), user.getUsername());
-        logger.info("User registered and logged in: {}", user.getUsername());
+            
 
-        return ResponseEntity.ok("User registered and logged in successfully");
+            String siteURL = "http://localhost:8080";
+            userServiceImpl.sendVerificationEmail(user, siteURL);
+
+            return ResponseEntity.ok("Please check your email to verify your account.");
+        } catch (Exception e) {
+            logger.error("Error during user registration: ", e);
+            return ResponseEntity.status(500).body("An internal server error occurred.");
+        }
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyUser(HttpServletRequest request, @RequestParam("code") String code) {
+        try {
+            User user = userServiceImpl.findByVerificationCode(code);
+            if (user == null || user.isEnabled()) {
+                return ResponseEntity.badRequest().body("Invalid verification code or account already verified.");
+            }
+            user.setEnabled(true);
+            user.setVerificationCode(code);
+            userServiceImpl.save(user);
+
+            HttpSession session = request.getSession(true);
+            session.setAttribute("username", user.getUsername());
+            sessionTrackingService.addSession(session.getId(), user.getUsername());
+
+            logger.info("User verified and logged in: {}", user.getUsername());
+
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            logger.error("Error during user verification: ", e);
+            return ResponseEntity.status(500).body("An internal server error occurred.");
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(HttpServletRequest request, @RequestBody User loginUser) {
-        if (loginUser.getUsername() == null || loginUser.getUsername().isEmpty() ||
-            loginUser.getPassword() == null || loginUser.getPassword().isEmpty()) {
-            return ResponseEntity.badRequest().body("Username and password must be provided");
-        }
+        try {
+            if (loginUser.getUsername() == null || loginUser.getUsername().isEmpty() ||
+                    loginUser.getPassword() == null || loginUser.getPassword().isEmpty()) {
+                return ResponseEntity.badRequest().body("Username and password must be provided");
+            }
 
-        if (userServiceImpl.verifyUserCredentials(loginUser.getUsername(), loginUser.getPassword())) {
-            HttpSession session = request.getSession(true);
-            session.setAttribute("username", loginUser.getUsername());
-            sessionTrackingService.addSession(session.getId(), loginUser.getUsername());
-            logger.info("User logged in: {}", loginUser.getUsername());
-            return ResponseEntity.ok("Login successful");
-        } else {
-            return ResponseEntity.status(401).body("Invalid username or password");
+            User user = userServiceImpl.findByUsername(loginUser.getUsername());
+            if (user != null && !user.isEnabled()) {
+                return ResponseEntity.status(403).body("Account not verified. Please check your email.");
+            }
+
+            if (userServiceImpl.verifyUserCredentials(loginUser.getUsername(), loginUser.getPassword())) {
+                HttpSession session = request.getSession(true);
+                session.setAttribute("username", loginUser.getUsername());
+                sessionTrackingService.addSession(session.getId(), loginUser.getUsername());
+                logger.info("User logged in: {}", loginUser.getUsername());
+                return ResponseEntity.ok("Login successful");
+            } else {
+                return ResponseEntity.status(401).body("Invalid username or password");
+            }
+        } catch (Exception e) {
+            logger.error("Error during login: ", e);
+            return ResponseEntity.status(500).body("An internal server error occurred.");
         }
     }
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            String username = (String) session.getAttribute("username");
-            sessionTrackingService.removeSession(session.getId());
-            session.invalidate();
-            logger.info("User logged out: {}", username);
+        try {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                String username = (String) session.getAttribute("username");
+                sessionTrackingService.removeSession(session.getId());
+                session.invalidate();
+                logger.info("User logged out: {}", username);
+            }
+            return ResponseEntity.ok("Logged out");
+        } catch (Exception e) {
+            logger.error("Error during logout: ", e);
+            return ResponseEntity.status(500).body("An internal server error occurred.");
         }
-        return ResponseEntity.ok("Logged out");
     }
 
     @GetMapping("/userinfo")
     public ResponseEntity<?> userInfo(@RequestParam(required = false) String username) {
-        if (username == null || username.isEmpty()) {
-            return ResponseEntity.badRequest().body("Username parameter is missing");
+        try {
+            if (username == null || username.isEmpty()) {
+                return ResponseEntity.badRequest().body("Username parameter is missing");
+            }
+            User user = userServiceImpl.findByUsername(username);
+            if (user == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            logger.error("Error fetching user info: ", e);
+            return ResponseEntity.status(500).body("An internal server error occurred.");
         }
-        User user = userServiceImpl.findByUsername(username);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody User user) {
-        if (user.getUsername() == null || user.getUsername().isEmpty() || 
-            user.getEmail() == null || user.getEmail().isEmpty() ||
-            user.getFirstName() == null || user.getFirstName().isEmpty() ||
-            user.getLastName() == null || user.getLastName().isEmpty()) {
-            return ResponseEntity.badRequest().body("All fields must be provided");
+        try {
+            if (user.getUsername() == null || user.getUsername().isEmpty() ||
+                    user.getEmail() == null || user.getEmail().isEmpty() ||
+                    user.getFirstName() == null || user.getFirstName().isEmpty() ||
+                    user.getLastName() == null || user.getLastName().isEmpty()) {
+                return ResponseEntity.badRequest().body("All fields must be provided");
+            }
+            User existingUser = userServiceImpl.findByUsername(user.getUsername());
+            if (existingUser == null) {
+                return ResponseEntity.notFound().build();
+            }
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+            existingUser.setEmail(user.getEmail());
+            userServiceImpl.save(existingUser);
+            return ResponseEntity.ok(existingUser);
+        } catch (Exception e) {
+            logger.error("Error updating user: ", e);
+            return ResponseEntity.status(500).body("An internal server error occurred.");
         }
-        User existingUser = userServiceImpl.findByUsername(user.getUsername());
-        if (existingUser == null) {
-            return ResponseEntity.notFound().build();
-        }
-        existingUser.setFirstName(user.getFirstName());
-        existingUser.setLastName(user.getLastName());
-        existingUser.setEmail(user.getEmail());
-        userServiceImpl.save(existingUser);
-        return ResponseEntity.ok(existingUser);
     }
 
     @GetMapping("/active-users")
     public ResponseEntity<Integer> getActiveUsers(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            String username = (String) session.getAttribute("username");
-            logger.info("Fetch active user: username = {}", username);
+        try {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                String username = (String) session.getAttribute("username");
+                logger.info("Fetch active user: username = {}", username);
+            }
+            int activeUsers = sessionTrackingService.getActiveSessions();
+            logger.info("Active users count: {}", activeUsers);
+            return ResponseEntity.ok(activeUsers);
+        } catch (Exception e) {
+            logger.error("Error fetching active users: ", e);
+            return ResponseEntity.status(500).body(null);
         }
-        int activeUsers = sessionTrackingService.getActiveSessions();
-        logger.info("Active users count: {}", activeUsers);
-        return ResponseEntity.ok(activeUsers);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
-        User user = userServiceImpl.findUserById(id);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
+        try {
+            User user = userServiceImpl.findUserById(id);
+            if (user == null) {
+                return ResponseEntity.notFound().build();
+            }
+            userServiceImpl.deleteUserById(id);
+            return ResponseEntity.ok("User deleted successfully");
+        } catch (Exception e) {
+            logger.error("Error deleting user: ", e);
+            return ResponseEntity.status(500).body("An internal server error occurred.");
         }
-        userServiceImpl.deleteUserById(id);
-        return ResponseEntity.ok("User deleted successfully");
     }
 }

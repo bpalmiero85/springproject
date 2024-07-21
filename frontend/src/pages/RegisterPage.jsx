@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import "../styles/RegisterPage.css";
 
 const RegisterPage = () => {
@@ -12,7 +11,6 @@ const RegisterPage = () => {
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
-  const [, setCookie] = useCookies(["user"]);
 
   const validate = () => {
     const newErrors = {};
@@ -54,10 +52,8 @@ const RegisterPage = () => {
       });
 
       if (response.ok) {
-        const data = await response.text();
-        console.log(data);
-        setCookie("user", username);
-        navigate(`/welcome?username=${username}`);
+        navigate(`/verify?username=${username}`);
+    
       } else {
         const errorText = await response.text();
         setServerError(errorText);
