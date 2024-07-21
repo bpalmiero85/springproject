@@ -53,8 +53,6 @@ public class UserController {
             user.setVerificationCode(UUID.randomUUID().toString());
             userServiceImpl.save(user);
 
-            
-
             String siteURL = "http://localhost:8080";
             userServiceImpl.sendVerificationEmail(user, siteURL);
 
@@ -73,7 +71,7 @@ public class UserController {
                 return ResponseEntity.badRequest().body("Invalid verification code or account already verified.");
             }
             user.setEnabled(true);
-            user.setVerificationCode(code);
+            user.setVerificationCode(null);
             userServiceImpl.save(user);
 
             HttpSession session = request.getSession(true);
@@ -85,6 +83,20 @@ public class UserController {
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             logger.error("Error during user verification: ", e);
+            return ResponseEntity.status(500).body("An internal server error occurred.");
+        }
+    }
+
+    @GetMapping("/verify-status")
+    public ResponseEntity<?> checkVerificationStatus(@RequestParam("username") String username) {
+        try {
+            User user = userServiceImpl.findByUsername(username);
+            if (user == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            logger.error("Error checking verification status: ", e);
             return ResponseEntity.status(500).body("An internal server error occurred.");
         }
     }
