@@ -30,7 +30,7 @@ public class SecurityConfig {
         config.addAllowedHeader("*");
         config.addAllowedMethod(HttpMethod.GET);
         config.addAllowedMethod(HttpMethod.POST);
-        config.addAllowedMethod(HttpMethod.DELETE);  // Allow DELETE method
+        config.addAllowedMethod(HttpMethod.DELETE);  
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

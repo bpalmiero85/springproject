@@ -7,25 +7,28 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 @Service
 public class SessionTrackingService {
 
     private static final Logger logger = LoggerFactory.getLogger(SessionTrackingService.class);
 
-    private ConcurrentHashMap<String, String> activeSessions = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Long> activeSessions = new ConcurrentHashMap<>();
     private AtomicInteger activeUserCount = new AtomicInteger(0);
 
-    public void addSession(String sessionId, String username) {
-        activeSessions.put(sessionId, username);
+    public void addSession(String sessionId, Long userId) {
+        activeSessions.put(sessionId, userId);
         int currentCount = activeUserCount.incrementAndGet();
-        logger.info("Session added: {} | Username: {} | Active User Count: {}", sessionId, username, currentCount);
+        logger.info("Session added: {} | User ID: {} | Active User Count: {}", sessionId, userId, currentCount);
     }
 
-    public void removeSession(String sessionId) {
-        String username = activeSessions.remove(sessionId);
-        if (username != null) {
+    public void removeSession(String sessionId, Long userId) {
+        Long removedUserId = activeSessions.remove(sessionId);
+        if (removedUserId != null && removedUserId.equals(userId)) {
             int currentCount = activeUserCount.decrementAndGet();
-            logger.info("Session removed: {} | Username: {} | Active User Count: {}", sessionId, username, currentCount);
+            logger.info("Session removed: {} | User ID: {} | Active User Count: {}", sessionId, userId, currentCount);
+        } else {
+            logger.warn("Failed to remove session: {} | User ID: {}. Session might not exist or user ID mismatch.", sessionId, userId);
         }
     }
 
@@ -35,3 +38,4 @@ public class SessionTrackingService {
         return currentCount;
     }
 }
+

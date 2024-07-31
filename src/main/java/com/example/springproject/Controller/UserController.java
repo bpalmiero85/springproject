@@ -75,12 +75,14 @@ public class UserController {
             userServiceImpl.save(user);
 
             HttpSession session = request.getSession(true);
-            session.setAttribute("username", user.getUsername());
-            sessionTrackingService.addSession(session.getId(), user.getUsername());
+            session.setAttribute("userId", user.getId());
+            sessionTrackingService.addSession(session.getId(), user.getId());
 
-            logger.info("User verified and logged in: {}", user.getUsername());
+            logger.info("User verified and logged in: {}", user.getId());
 
-            return ResponseEntity.ok(user);
+            String redirectUrl = "http://localhost:3000/welcome?username=" + user.getUsername();
+            return ResponseEntity.status(302).header("Location", redirectUrl).build();
+
         } catch (Exception e) {
             logger.error("Error during user verification: ", e);
             return ResponseEntity.status(500).body("An internal server error occurred.");
@@ -116,9 +118,9 @@ public class UserController {
 
             if (userServiceImpl.verifyUserCredentials(loginUser.getUsername(), loginUser.getPassword())) {
                 HttpSession session = request.getSession(true);
-                session.setAttribute("username", loginUser.getUsername());
-                sessionTrackingService.addSession(session.getId(), loginUser.getUsername());
-                logger.info("User logged in: {}", loginUser.getUsername());
+                session.setAttribute("userId", user.getId());
+                sessionTrackingService.addSession(session.getId(), user.getId());
+                logger.info("User logged in: {}", user.getId());
                 return ResponseEntity.ok("Login successful");
             } else {
                 return ResponseEntity.status(401).body("Invalid username or password");
@@ -130,21 +132,28 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) {
-        try {
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                String username = (String) session.getAttribute("username");
-                sessionTrackingService.removeSession(session.getId());
+public ResponseEntity<String> logout(HttpServletRequest request) {
+    try {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId != null) {
+                sessionTrackingService.removeSession(session.getId(), userId);
                 session.invalidate();
-                logger.info("User logged out: {}", username);
+                logger.info("User logged out: {}", userId);
+            } else {
+                logger.warn("User ID not found in session: {}", session.getId());
             }
-            return ResponseEntity.ok("Logged out");
-        } catch (Exception e) {
-            logger.error("Error during logout: ", e);
-            return ResponseEntity.status(500).body("An internal server error occurred.");
+        } else {
+            logger.warn("No session found for logout.");
         }
+        return ResponseEntity.ok("Logged out");
+    } catch (Exception e) {
+        logger.error("Error during logout: ", e);
+        return ResponseEntity.status(500).body("An internal server error occurred.");
     }
+}
+
 
     @GetMapping("/userinfo")
     public ResponseEntity<?> userInfo(@RequestParam(required = false) String username) {
@@ -192,8 +201,8 @@ public class UserController {
         try {
             HttpSession session = request.getSession(false);
             if (session != null) {
-                String username = (String) session.getAttribute("username");
-                logger.info("Fetch active user: username = {}", username);
+                Long userId = (Long) session.getAttribute("userId");
+                logger.info("Fetch active user: username = {}", userId);
             }
             int activeUsers = sessionTrackingService.getActiveSessions();
             logger.info("Active users count: {}", activeUsers);
