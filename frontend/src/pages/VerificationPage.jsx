@@ -72,7 +72,7 @@ const VerificationPage = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       if(isVerified) {
-        navigate(`/welcome?username=${username}`);
+        navigate(`/`);
       }
     }, 1000);
 
@@ -82,7 +82,7 @@ const VerificationPage = () => {
 
     useEffect(() => {
       if(isVerified){
-        navigate(`/welcome?username=${username}`);
+        navigate(`/`);
       }
     }, [isVerified, navigate, username]);
   
