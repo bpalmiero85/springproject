@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/user/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/user/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/user/**").permitAll()  // Allow DELETE method for /user/**
+                .antMatchers(HttpMethod.DELETE, "/user/**").permitAll()  
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
